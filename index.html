@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homepage - Kalinga Senior Portal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: serif;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 80px;
+      padding: 0 30px;
+      background: rgba(248, 249, 250, 0.95);
+      backdrop-filter: blur(10px);
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1001;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo {
+      width: 70px;
+      height: 70px;
+      margin-right: 15px;
+    }
+
+    .title {
+      font-size: 30px;
+      font-weight: bold;
+      line-height: 1;
+    }
+
+    .kalinga, .senior { color: green; }
+    .portal { color: #0d47a1; }
+  
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .login {
+      color: #3C0061;
+      text-decoration: none;
+      padding: 12px 24px;
+      font-size: 18px;
+      font-weight: 500;
+      background: white;
+      border: 2px solid #3C0061;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+    }
+
+    .login:hover {
+      background: #3C0061;
+      color: white;
+    }
+
+    /* Menu Toggle */
+    .menu-toggle {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      width: 30px;
+      height: 25px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .menu-toggle span {
+      width: 100%;
+      height: 4px;
+      background: #0d47a1;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .menu-toggle.active span:nth-child(1) {
+      transform: rotate(45deg) translate(8px, 8px);
+    }
+    .menu-toggle.active span:nth-child(2) { opacity: 0; }
+    .menu-toggle.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(7px, -7px);
+    }
+
+    /* Mobile Menu */
+    .mobile-menu {
+      position: fixed;
+      top: 80px;
+      right: -100%;
+      width: 80%;
+      max-width: 350px;
+      height: calc(100vh - 80px);
+      background: linear-gradient(135deg, #0d47a1, #1e3a8a);
+      transition: right 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      padding: 30px 0;
+      z-index: 1000;
+      box-shadow: -5px 0 20px rgba(0,0,0,0.3);
+      overflow-y: auto;
+    }
+
+    .mobile-menu.active { right: 0; }
+
+    .menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .menu-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .mobile-menu a {
+      color: white;
+      text-decoration: none;
+      display: block;
+      padding: 20px 30px;
+      font-size: 20px;
+      font-weight: 500;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      transition: background 0.3s;
+    }
+
+    .mobile-menu a:hover,
+    .mobile-menu a:active {
+      background: rgba(255,255,255,0.2);
+    }
+
+    /* Hero */
+    .hero {
+      height: 43.375vw;
+      margin-top: 80px;
+      background: url('bg.jpg') center/cover;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      color: white;
+      padding: 40px 60px;
+    }
+
+    .hero h2 {
+      font-size: 36px;
+      color: #0d47a1;
+      margin: 5px 0;
+    }
+
+    .hero p {
+      font-size: 36px;
+      color: green;
+      margin: 5px 0;
+    }
+
+    /* Navigation */
+    .nav {
+      background: white;
+      padding: 40px 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      gap: 0;
+    }
+
+    .nav li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      padding: 20px 25px;
+      flex: 1;
+      max-width: 220px;
+      position: relative;
+    }
+
+    .nav li:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1px;
+      height: 40px;
+      background: #e0e0e0;
+    }
+
+    .nav li:hover {
+      background: rgba(13, 71, 161, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .nav-icon {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 900;
+      color: white;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .nav li:nth-child(1) .nav-icon,
+    .nav li:nth-child(3) .nav-icon,
+    .nav li:nth-child(5) .nav-icon { 
+      background: linear-gradient(135deg, #0d47a1, #1976d2);
+      box-shadow: 0 6px 20px rgba(13, 71, 161, 0.4);
+    }
+    
+    .nav li:nth-child(2) .nav-icon,
+    .nav li:nth-child(4) .nav-icon { 
+      background: linear-gradient(135deg, #4CAF50, #66BB6A);
+      box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+    }
+
+    .nav li:hover .nav-icon {
+      transform: scale(1.15) rotate(360deg);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    }
+
+    .nav-text {
+      font-size: 17px;
+      font-weight: 600;
+      color: #3C0061;
+      line-height: 1.3;
+    }
+
+    .nav li:hover .nav-text {
+      color: #0d47a1;
+      font-weight: 700;
+    }
+
+    /* Mobile Styles */
+    @media (max-width: 768px) {
+      .header {
+        height: 70px;
+        padding: 0 20px;
+      }
+
+      .logo {
+        width: 50px;
+        height: 50px;
+        margin-right: 12px;
+      }
+
+      .title { font-size: 22px; }
+
+      .login {
+        padding: 8px 16px;
+        font-size: 16px;
+      }
+
+      .menu-toggle {
+        width: 28px;
+        height: 22px;
+      }
+
+      .menu-toggle span { height: 3px; }
+
+      /* Add this to your existing mobile media query */
+      .hero {
+        height: 20vh;
+        min-height: 100px;
+        margin-top: 70px;
+        padding: 40px 30px; 
+        align-items: flex-start;
+        text-align: left;
+      }
+
+      .hero h2 { 
+        font-size: 20px; 
+        margin: 8px 0;
+        text-align: left;
+      }
+      
+      .hero p { 
+        font-size: 20px;
+        margin: 8px 0;
+        text-align: left;
+      }
+
+      .nav {
+        padding: 30px 20px;
+      }
+
+      .nav ul {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .nav li {
+        max-width: none;
+        border-radius: 16px;
+        background: rgba(255,255,255,0.95);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        padding: 25px;
+      }
+
+      .nav li:not(:last-child)::after { display: none; }
+
+      .nav-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+      }
+
+      .nav-text { font-size: 20px; }
+
+      .mobile-menu {
+        top: 70px;
+        height: calc(100vh - 70px);
+        width: 85vw;
+        right: -85vw;
+      }
+
+      .menu-overlay {
+        top: 70px;
+        height: calc(100vh - 70px);
+      }
+    }
+
+    @media (max-width: 360px) {
+      .hero h2 { font-size: 24px; }
+      .hero p { font-size: 20px; }
+      .title { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="menu-overlay" id="menuOverlay"></div>
+
+  <div class="header">
+    <div class="logo-section">
+      <img src="logo.png" class="logo" alt="Kalinga Logo">
+      <h1 class="title">
+        <span class="kalinga">Kalinga</span><br>
+        <span class="senior">Senior</span> 
+        <span class="portal">Portal</span>
+      </h1>
+    </div>
+    
+    <div class="header-right">
+      <a href="login.html" class="login">Log In</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+
+  <nav class="mobile-menu" id="mobileMenu">
+    <a href="#home">Home</a>
+    <a href="#account">Account</a>
+    <a href="#services">Services</a>
+    <a href="#settings">Settings</a>
+    <a href="#about">About Us</a>
+    <a href="#contact">Contact Us</a>
+  </nav>
+
+  <section class="hero">
+    <h2>Your Documents.</h2>
+    <p><b>Our Care.</b></p>
+    <h2>Always With You.</h2>
+    
+  </section>
+
+  <nav class="nav">
+    <ul>
+      <li onclick="window.location.href='store.html'">
+        <div class="nav-icon" ><i class="fas fa-shield-alt"></i></div>
+        <div class="nav-text">Secure Storage</div>
+      </li>
+      <li onclick="window.location.href='apply.html'">
+        <div class="nav-icon" ><i class="fas fa-file-contract"></i></div>
+        <div class="nav-text">Apply & Renew</div>
+      </li>
+      <li onclick="window.location.href='pay.html'">
+        <div class="nav-icon"  ><i class="fas fa-credit-card"></i></div>
+        <div class="nav-text">Pay Online</div>
+      </li>
+      <li onclick="window.location.href='dis.html'">
+        <div class="nav-icon"  ><i class="fas fa-gift"></i></div>
+        <div class="nav-text">Discounts & Benefits</div>
+      </li>
+      <li onclick="window.location.href='faq.html'">
+        <div class="nav-icon"  ><i class="fas fa-question-circle"></i></div>
+        <div class="nav-text">FAQ & Guides</div>
+      </li>
+    </ul>
+  </nav>
+
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const menuOverlay = document.getElementById('menuOverlay');
+
+    function toggleMenu() {
+      const isActive = mobileMenu.classList.contains('active');
+      mobileMenu.classList.toggle('active');
+      menuToggle.classList.toggle('active');
+      menuOverlay.classList.toggle('active');
+      document.body.style.overflow = isActive ? '' : 'hidden';
+    }
+
+    menuToggle.addEventListener('click', toggleMenu);
+    menuOverlay.addEventListener('click', toggleMenu);
+    
+    document.querySelectorAll('.mobile-menu a').forEach(link => {
+      link.addEventListener('click', toggleMenu);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+        toggleMenu();
+      }
+    });
+  </script>
+</body>
+</html>

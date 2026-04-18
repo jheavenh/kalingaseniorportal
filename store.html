@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Storage - Kalinga Senior Portal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: serif;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+        .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 80px;
+      padding: 0 30px;
+      background: rgba(248, 249, 250, 0.95);
+      backdrop-filter: blur(10px);
+      
+      top: 0;
+      width: 100%;
+      z-index: 1001;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo {
+      width: 70px;
+      height: 70px;
+      margin-right:15px;
+    }
+
+    .title {
+      font-size: 30px;
+      font-weight: bold;
+      line-height: 1;
+    }
+
+    .kalinga, .senior { color: green; }
+    .portal { color: #0d47a1; }
+
+    /* Menu Toggle */
+      .menu-toggle {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      width: 30px;
+      height: 25px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .menu-toggle span {
+      width: 100%;
+      height: 4px;
+      background: #0d47a1;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .menu-toggle.active span:nth-child(1) {
+      transform: rotate(45deg) translate(8px, 8px);
+    }
+    .menu-toggle.active span:nth-child(2) { opacity: 0; }
+    .menu-toggle.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(7px, -7px);
+    }
+
+    /* Mobile Menu */
+    .mobile-menu {
+      position: fixed;
+      top: 80px;
+      right: -100%;
+      width: 80%;
+      max-width: 350px;
+      height: calc(100vh - 80px);
+      background: linear-gradient(135deg, #0d47a1, #1e3a8a);
+      transition: right 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      padding: 30px 0;
+      z-index: 1000;
+      box-shadow: -5px 0 20px rgba(0,0,0,0.3);
+      overflow-y: auto;
+    }
+
+    .mobile-menu.active { right: 0; }
+
+    .menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .menu-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .mobile-menu a {
+      color: white;
+      text-decoration: none;
+      display: block;
+      padding: 20px 30px;
+      font-size: 20px;
+      font-weight: 500;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      transition: background 0.3s;
+    }
+      /* Mobile Styles */
+    @media (max-width: 768px) {
+      .header {
+        height: 70px;
+        padding: 0 20px;
+      }
+
+      .logo {
+        width: 50px;
+        height: 50px;
+        margin-right:12px;
+      }
+
+      .title { font-size: 22px; }
+
+      .menu-toggle {
+        width: 28px;
+        height: 22px;
+      }
+
+      .menu-toggle span { height: 3px; }
+
+      .mobile-menu {
+        top: 70px;
+        height: calc(100vh - 70px);
+        width: 85vw;
+        right: -85vw;
+      }
+
+      .menu-overlay {
+        top: 70px;
+        height: calc(100vh - 70px);
+      }
+    }
+
+    @media (max-width: 360px) {
+      .title { font-size: 20px; }
+    }
+
+    .mobile-menu a:hover,
+    .mobile-menu a:active {
+      background: rgba(255,255,255,0.2);
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-top: 80px;
+      padding: 40px 20px;
+      min-height: calc(100vh - 80px);
+    }
+
+    /* Storage Page Hero */
+    .storage-hero {
+      background: linear-gradient(135deg, #0d47a1, #1976d2);
+      color: white;
+      padding: 60px 30px;
+      border-radius: 20px;
+      margin-bottom: 40px;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(13, 71, 161, 0.3);
+    }
+
+    .storage-hero h1 {
+      font-size: 36px;
+      margin-bottom: 20px;
+    }
+
+    .storage-hero p {
+      font-size: 20px;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Storage Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin-bottom: 50px;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 40px 30px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      border-top: 5px solid #0d47a1;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+    }
+
+    .stat-number {
+      font-size: 48px;
+      font-weight: bold;
+      color: #0d47a1;
+      margin-bottom: 15px;
+    }
+
+    .stat-label {
+      font-size: 20px;
+      color: #666;
+      font-weight: 500;
+    }
+
+    /* Upload Section */
+    .upload-section {
+      max-width: 600px;
+      margin: 0 auto 50px;
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      border-top: 6px solid #4CAF50;
+    }
+
+    .upload-section h2 {
+      color: #0d47a1;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 28px;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: #333;
+      font-size: 16px;
+    }
+
+    select, input[type="text"], input[type="file"] {
+      width: 100%;
+      padding: 15px 20px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      background: #f8f9fa;
+    }
+
+    select:focus, input:focus {
+      outline: none;
+      border-color: #0d47a1;
+      box-shadow: 0 0 0 3px rgba(13,71,161,0.1);
+      background: white;
+    }
+
+    .upload-btn {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, #4CAF50, #66BB6A);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .upload-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(76,175,80,0.4);
+    }
+
+    /* Documents Grid */
+    .documents-section {
+      max-width: 1200px;
+      margin: 0 auto 50px;
+    }
+
+    .section-title {
+      font-size: 32px;
+      color: #0d47a1;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .search-box {
+      max-width: 500px;
+      margin: 0 auto 30px;
+      display: block;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 18px 25px;
+      border: 2px solid #e0e0e0;
+      border-radius: 50px;
+      font-size: 16px;
+      background: white url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="%23666" viewBox="0 0 16 16"><path d="m11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>') no-repeat 20px center;
+      padding-left: 55px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    .documents-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 25px;
+    }
+
+    .doc-card {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      border-top: 6px solid #2196F3;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .doc-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #2196F3, #21CBF3);
+    }
+
+    .doc-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+    }
+
+    .doc-category {
+      display: inline-block;
+      padding: 6px 16px;
+      background: linear-gradient(135deg, #2196F3, #21CBF3);
+      color: white;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .doc-name {
+      font-size: 22px;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .doc-date {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .doc-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+
+    .view-btn {
+      background: linear-gradient(135deg, #2196F3, #21CBF3);
+      color: white;
+    }
+
+    .print-btn {
+      background: linear-gradient(135deg, #9C27B0, #AB47BC);
+      color: white;
+    }
+
+    .download-btn {
+      background: linear-gradient(135deg, #FF9800, #FFB74D);
+      color: white;
+    }
+
+    .delete-btn {
+      background: linear-gradient(135deg, #f44336, #ef5350);
+      color: white;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+
+    .no-docs {
+      text-align: center;
+      padding: 60px 20px;
+      color: #666;
+      grid-column: 1 / -1;
+    }
+
+    .no-docs i {
+      font-size: 64px;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+
+    /* Document Viewer Modal */
+    .doc-viewer-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .doc-viewer-modal.active {
+      display: flex;
+    }
+
+    .viewer-container {
+      background: white;
+      border-radius: 15px;
+      max-width: 90vw;
+      max-height: 90vh;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+
+    .viewer-header {
+      padding: 20px 25px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 15px 15px 0 0;
+      background: linear-gradient(135deg, #0d47a1, #1976d2);
+      color: white;
+    }
+
+    .viewer-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .viewer-close {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .viewer-close:hover {
+      background: rgba(255,255,255,0.3);
+      transform: scale(1.1);
+    }
+
+    .viewer-content {
+      max-height: 70vh;
+      overflow: auto;
+      padding: 25px;
+      position: relative;
+    }
+
+    .pdf-viewer {
+      width: 100%;
+      height: 500px;
+      border: none;
+    }
+
+    .image-viewer {
+      max-width: 100%;
+      max-height: 500px;
+      width: auto;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .viewer-footer {
+      padding: 20px 25px;
+      border-top: 1px solid #eee;
+      display: flex;
+      gap: 15px;
+      justify-content: flex-end;
+      border-radius: 0 0 15px 15px;
+    }
+
+    .viewer-btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+
+    .viewer-download {
+      background: linear-gradient(135deg, #FF9800, #FFB74D);
+      color: white;
+    }
+
+    .viewer-print {
+      background: linear-gradient(135deg, #2196F3, #21CBF3);
+      color: white;
+    }
+
+    /* Mobile Styles */
+    @media (max-width: 768px) {
+      .header {
+        height: 70px;
+        padding: 0 15px;
+      }
+
+      .back-container {
+        padding: 10px 16px;
+        gap: 8px;
+      }
+
+      .back-icon { font-size: 18px; }
+      .back-text { font-size: 14px; }
+
+      .logo-section { gap: 12px; }
+      .logo { width: 45px; height: 45px; }
+      .title { font-size: 22px; }
+
+      .main-content { padding: 30px 15px;       margin-top: 70px; }
+
+      .storage-hero {
+        padding: 40px 20px;
+        margin-bottom: 30px;
+      }
+
+      .storage-hero h1 { font-size: 28px; }
+      .storage-hero p { font-size: 18px; }
+
+      .stats-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+      }
+
+      .upload-section {
+        padding: 30px 25px;
+        margin-bottom: 40px;
+      }
+
+      .documents-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .doc-actions {
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .action-btn {
+        padding: 14px 16px;
+        font-size: 14px;
+      }
+
+      .viewer-container {
+        max-width: 95vw;
+        max-height: 95vh;
+      }
+
+      .viewer-content {
+        padding: 15px;
+      }
+
+      .pdf-viewer {
+        height: 400px;
+      }
+    }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      .doc-print-content, .doc-print-content * {
+        visibility: visible;
+      }
+      .doc-print-content {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Overlay -->
+  <div class="menu-overlay" id="menuOverlay"></div>
+
+  <!-- Document Viewer Modal -->
+  <div class="doc-viewer-modal" id="docViewerModal">
+    <div class="viewer-container">
+      <div class="viewer-header">
+        <div class="viewer-title" id="viewerTitle">Document Viewer</div>
+        <button class="viewer-close" onclick="closeViewer()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="viewer-content" id="viewerContent">
+        <!-- Content will be loaded here -->
+      </div>
+      <div class="viewer-footer">
+        <button class="viewer-btn viewer-download" onclick="downloadCurrentDoc()">
+          <i class="fas fa-download"></i> Download
+        </button>
+        <button class="viewer-btn viewer-print" onclick="printCurrentDoc()">
+          <i class="fas fa-print"></i> Print
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div class="header">    
+    <div class="logo-section">
+      <img src="logo.png" class="logo" alt="Kalinga Logo">
+      <h1 class="title">
+        <span class="kalinga">Kalinga</span><br>
+        <span class="senior">Senior</span> 
+        <span class="portal">Portal</span>
+      </h1>
+    </div>
+    
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+
+  <nav class="mobile-menu" id="mobileMenu">
+    <a href="store.html"> <div class="nav-icon"><i class="fas fa-shield-alt"></i> Secure Storage</div></a>
+    <a href="apply.html"><div class="nav-icon"><i class="fas fa-file-contract"></i> Apply & Renew</div></a>
+    <a href="pay.html"><div class="nav-icon"><i class="fas fa-credit-card"></i> Pay Online</div></a>
+    <a href="dis.html"><div class="nav-icon"><i class="fas fa-gift"></i> Discounts & Benefits</div></a>
+    <a href="faq.html"><div class="nav-icon"><i class="fas fa-question-circle"></i> FAQ & Guides</div></a><hr>
+    <a href="index.html">Home</a>
+    <a href="acc.html">Account</a>
+    <a href="service.html">Services</a>
+    <a href="setting.html">Settings</a>
+    <a href="about.html">About Us</a>
+    <a href="contact.html">Contact Us</a>
+  </nav>
+  
+  <!-- Main Storage Content -->
+  <div class="main-content">
+    <!-- Hero Section -->
+    <section class="storage-hero">
+      <h1><i class="fas fa-shield-alt"></i> Secure Document Vault</h1>
+      <p>Your important documents are safely stored with bank-level encryption. Upload, organize, and access anytime, anywhere.</p>
+    </section>
+
+    <!-- Storage Stats - Dynamic -->
+    <div class="stats-grid" id="statsGrid">
+      <!-- Stats will be populated by JavaScript -->
+    </div>
+
+    <!-- Upload Section -->
+    <section class="upload-section">
+      <h2><i class="fas fa-cloud-upload-alt"></i> Upload New Document</h2>
+      <div class="form-group">
+        <label><i class="fas fa-folder"></i> Category</label>
+        <select id="category">
+          <option value="ID">🪪 ID Documents</option>
+          <option value="Health">🏥 Health Records</option>
+          <option value="Certificate">📄 Certificates</option>
+          <option value="Financial">💰 Financial Docs</option>
+          <option value="Property">🏠 Property Docs</option>
+          <option value="Others">📁 Others</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label><i class="fas fa-file"></i> Document Name</label>
+        <input type="text" id="docName" placeholder="Enter document name (e.g., Senior Citizen ID 2024)">
+      </div>
+      <div class="form-group">
+        <label><i class="fas fa-upload"></i> Select File</label>
+        <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+      </div>
+      <button class="upload-btn" onclick="saveDoc()">
+        <i class="fas fa-save"></i> Save Document Securely
+      </button>
+    </section>
+
+    <!-- Documents Section -->
+    <section class="documents-section">
+      <h2 class="section-title">
+        <i class="fas fa-folder-open"></i> My Documents 
+        <span id="totalDocs" style="color: #4CAF50; font-size: 0.7em;"></span>
+      </h2>
+      
+      <input type="text" id="searchBox" class="search-box" placeholder="🔍 Search documents by name..." onkeyup="displayDocs()">
+      
+      <div class="documents-grid" id="docList">
+        <!-- Documents will be populated here -->
+      </div>
+    </section>
+  </div>
+
+  <script>
+    let docs = JSON.parse(localStorage.getItem("kalingaDocs")) || [];
+    let currentDoc = null;
+
+    // Update stats dynamically
+    function updateStats() {
+      const totalDocs = docs.length;
+      const totalSize = docs.reduce((sum, doc) => sum + (doc.fileSize || 0), 0);
+      const categories = {};
+      
+      docs.forEach(doc => {
+        categories[doc.category] = (categories[doc.category] || 0) + 1;
+      });
+
+      document.getElementById('statsGrid').innerHTML = `
+        <div class="stat-card">
+          <div class="stat-number">${formatBytes(totalSize)}</div>
+          <div class="stat-label">Total Storage</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">${totalDocs}</div>
+          <div class="stat-label">Documents</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">${Object.keys(categories).length}</div>
+          <div class="stat-label">Categories</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">256-bit</div>
+          <div class="stat-label">Encryption</div>
+        </div>
+      `;
+      
+      document.getElementById('totalDocs').textContent = `(${totalDocs} documents)`;
+    }
+
+    // Format bytes to human readable
+    function formatBytes(bytes) {
+      if (bytes === 0) return '0 B';
+      const k = 1024;
+      const sizes = ['B', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    // VIEW DOCUMENT
+    function viewDoc(doc) {
+      currentDoc = doc;
+      document.getElementById('viewerTitle').textContent = doc.name;
+      
+      const viewerContent = document.getElementById('viewerContent');
+      const fileExt = doc.name.split('.').pop().toLowerCase();
+      
+      if (fileExt === 'pdf') {
+        viewerContent.innerHTML = `
+          <iframe src="${doc.fileData}" class="pdf-viewer" frameborder="0"></iframe>
+        `;
+      } else if (['jpg', 'jpeg', 'png', 'gif', 'bmp'].includes(fileExt)) {
+        viewerContent.innerHTML = `
+          <img src="${doc.fileData}" alt="${doc.name}" class="image-viewer" />
+          <div style="text-align: center; margin-top: 15px; color: #666;">
+            📄 ${doc.name} | ${formatBytes(doc.fileSize)} | ${doc.uploadDate}
+          </div>
+        `;
+      } else {
+        // For other documents, show download prompt
+        viewerContent.innerHTML = `
+          <div style="text-align: center; padding: 40px;">
+            <i class="fas fa-file" style="font-size: 64px; color: #ccc; margin-bottom: 20px;"></i>
+            <h3>${doc.name}</h3>
+            <p style="color: #666; margin-bottom: 20px;">
+              Document type not supported for preview<br>
+              Use Download or Print buttons below
+            </p>
+            <div style="color: #0d47a1; font-weight: 600;">
+              📁 ${doc.category} | 📅 ${doc.uploadDate} | 💾 ${formatBytes(doc.fileSize)}
+            </div>
+          </div>
+        `;
+      }
+      
+      document.getElementById('docViewerModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Close viewer
+    function closeViewer() {
+      document.getElementById('docViewerModal').classList.remove('active');
+      document.body.style.overflow = '';
+      currentDoc = null;
+    }
+
+    // Download current document
+    function downloadCurrentDoc() {
+      if (currentDoc) {
+        const link = document.createElement('a');
+        link.href = currentDoc.fileData;
+        link.download = currentDoc.name;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }
+
+    // Print current document
+    function printCurrentDoc() {
+      if (!currentDoc) return;
+      
+      const fileExt = currentDoc.name.split('.').pop().toLowerCase();
+      
+      if (fileExt === 'pdf') {
+        // Direct print for PDF
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = currentDoc.fileData;
+        document.body.appendChild(iframe);
+        
+        iframe.onload = function() {
+          iframe.contentWindow.print();
+          setTimeout(() => {
+            document.body.removeChild(iframe);
+          }, 1000);
+        };
+      } else {
+        // Create print-friendly page for images/other docs
+        const printWindow = window.open('', '_blank');
+        const printContent = `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>Print - ${currentDoc.name}</title>
+            <style>
+              body { font-family: Arial, sans-serif; margin: 40px; max-width: 800px; margin: auto; }
+              .header { text-align: center; margin-bottom: 40px; border-bottom: 2px solid #0d47a1; padding-bottom: 20px; }
+              .header h1 { color: #0d47a1; margin: 0; }
+              .doc-info { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 30px; }
+              .image-container { text-align: center; margin: 30px 0; }
+              .image-container img { max-width: 100%; max-height: 70vh; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+              @media print { body { margin: 0; } }
+            </style>
+          </head>
+          <body>
+            <div class="header">
+              <h1><i style="color: green;">Kalinga</i> Senior Portal</h1>
+              <p>Secure Document Print</p>
+            </div>
+            <div class="doc-info">
+              <h2>${currentDoc.name}</h2>
+              <p><strong>Category:</strong> ${currentDoc.category}</p>
+              <p><strong>Date:</strong> ${currentDoc.uploadDate}</p>
+              <p><strong>Size:</strong> ${formatBytes(currentDoc.fileSize)}</p>
+            </div>
+            ${fileExt === 'pdf' ? 
+              `<iframe src="${currentDoc.fileData}" style="width:100%; height:70vh; border:none;"></iframe>` :
+              `<div class="image-container">
+                <img src="${currentDoc.fileData}" alt="${currentDoc.name}" />
+              </div>`
+            }
+          </body>
+          </html>
+        `;
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+        printWindow.onload = () => {
+          printWindow.focus();
+          printWindow.print();
+        };
+      }
+    }
+
+    // SAVE DOCUMENT
+    function saveDoc() {
+      const category = document.getElementById("category").value;
+      const name = document.getElementById("docName").value.trim();
+      const file = document.getElementById("fileInput").files[0];
+
+      if (!name) {
+        alert('❌ Please enter a document name');
+        document.getElementById("docName").focus();
+        return;
+      }
+
+      if (!file) {
+        alert('❌ Please select a file to upload');
+        return;
+      }
+
+      if (file.size > 10 * 1024 * 1024) { // 10MB limit
+        alert('❌ File size too large. Maximum 10MB allowed.');
+        return;
+      }
+
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        const doc = {
+          id: Date.now(),
+          category: category,
+          name: name,
+          fileData: e.target.result,
+          fileSize: file.size,
+          uploadDate: new Date().toLocaleDateString('en-PH')
+        };
+
+        docs.unshift(doc); // Add to beginning for newest first
+        localStorage.setItem("kalingaDocs", JSON.stringify(docs));
+
+        // Reset form
+        document.getElementById("docName").value = "";
+        document.getElementById("fileInput").value = "";
+        document.getElementById("category").selectedIndex = 0;
+
+        updateStats();
+        displayDocs();
+
+        // Success feedback
+        const btn = event.target;
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check"></i> Saved!';
+        btn.style.background = 'linear-gradient(135deg, #4CAF50, #66BB6A)';
+        setTimeout(() => {
+          btn.innerHTML = originalText;
+        }, 2000);
+      };
+
+      reader.onerror = function() {
+        alert('❌ Error reading file. Please try again.');
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    // DISPLAY DOCUMENTS
+    function displayDocs() {
+      const list = document.getElementById("docList");
+      const search = document.getElementById("searchBox").value.toLowerCase();
+
+      const filteredDocs = docs.filter(d => 
+        d.name.toLowerCase().includes(search)
+      );
+
+      if (filteredDocs.length === 0) {
+        list.innerHTML = `
+          <div class="no-docs">
+            <i class="fas fa-folder-open"></i>
+            <h3>No documents found</h3>
+            <p>${search ? 'Try a different search term' : 'Upload your first document above'}</p>
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = filteredDocs.map(doc => `
+        <div class="doc-card">
+          <div class="doc-category">${doc.category}</div>
+          <div class="doc-name">${doc.name}</div>
+          <div class="doc-date">
+            <i class="fas fa-calendar"></i> ${doc.uploadDate} 
+            - ${formatBytes(doc.fileSize || 0)}
+          </div>
+          <div class="doc-actions">
+            <button class="action-btn view-btn" onclick="viewDoc(${JSON.stringify(doc).replace(/"/g, '&quot;')})">
+              <i class="fas fa-eye"></i> View
+            </button>
+            <a href="${doc.fileData}" download="${doc.name}" class="action-btn download-btn">
+              <i class="fas fa-download"></i> Download
+            </a>
+            <button class="action-btn print-btn" onclick="printDoc(${doc.id})">
+              <i class="fas fa-print"></i> Print
+            </button>
+            <button class="action-btn delete-btn" onclick="deleteDoc(${doc.id})">
+              <i class="fas fa-trash"></i> Delete
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // PRINT DOCUMENT (direct from list)
+    function printDoc(id) {
+      const doc = docs.find(d => d.id === id);
+      if (doc) {
+        currentDoc = doc;
+        printCurrentDoc();
+      }
+    }
+
+    // DELETE DOCUMENT
+    function deleteDoc(id) {
+      if (confirm('🗑️ Are you sure you want to delete this document?\nThis action cannot be undone.')) {
+        docs = docs.filter(d => d.id !== id);
+        localStorage.setItem("kalingaDocs", JSON.stringify(docs));
+        updateStats();
+        displayDocs();
+      }
+    }
+
+    // Menu Toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const menuOverlay = document.getElementById('menuOverlay');
+
+    function toggleMenu() {
+      const isActive = mobileMenu.classList.contains('active');
+      mobileMenu.classList.toggle('active');
+      menuToggle.classList.toggle('active');
+      menuOverlay.classList.toggle('active');
+      document.body.style.overflow = isActive ? '' : 'hidden';
+    }
+
+    menuToggle.addEventListener('click', toggleMenu);
+    menuOverlay.addEventListener('click', toggleMenu);
+    
+    document.querySelectorAll('.mobile-menu a').forEach(link => {
+            link.addEventListener('click', toggleMenu);
+    });
+
+    // Enter key support for search and upload
+    document.getElementById('searchBox').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') displayDocs();
+    });
+
+    document.getElementById('docName').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') saveDoc();
+    });
+
+    // Close viewer on escape and overlay click
+    document.getElementById('docViewerModal').addEventListener('click', function(e) {
+      if (e.target === this) closeViewer();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (document.getElementById('docViewerModal').classList.contains('active')) {
+          closeViewer();
+        } else if (mobileMenu.classList.contains('active')) {
+          toggleMenu();
+        }
+      }
+    });
+
+    // Prevent body scroll when modal is open
+    document.getElementById('docViewerModal').addEventListener('transitionend', function() {
+      if (!this.classList.contains('active')) {
+        document.body.style.overflow = '';
+      }
+    });
+
+    // INITIAL LOAD
+    updateStats();
+    displayDocs();
+
+    // Auto-save draft detection
+    window.addEventListener('beforeunload', function(e) {
+      const name = document.getElementById('docName').value;
+      if (name || document.getElementById('fileInput').files.length) {
+        e.preventDefault();
+        e.returnValue = 'You have unsaved changes. Are you sure?';
+      }
+    });
+
+    // Click outside viewer to close
+    window.addEventListener('click', function(e) {
+      const modal = document.getElementById('docViewerModal');
+      if (e.target === modal) {
+        closeViewer();
+      }
+    });
+  </script>
+</body>
+</html>

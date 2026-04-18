@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Kalinga Senior Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family:serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 20vh; 
+            background-color: white;
+            padding: 20px;
+        }
+  
+        .signup-box {
+            display: flex;
+            width: 100%;
+            max-width: 800px;
+            height: 600px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,80,120,0.1);
+            overflow: hidden;
+        }
+
+        /* LEFT SIDE - BLUE */
+        .left-part {
+            width: 40%;
+            background: url('bg.png');
+            color: white;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+            gap: 8px;
+        }
+
+        .logo {
+            width: 45px;
+            height: 45px;
+            margin-bottom: 5px; 
+        }
+
+        .title {
+            font-size: 15px;
+            font-weight: bold;
+            line-height: 0.9;
+            text-align: left;
+        }
+        .kalinga, .senior { color: green; }
+        .portal { color: #0d47a1; }
+
+        .tagline-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .left-part h1 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            line-height: 1.2;
+            color: #0d47a1;
+        }
+
+        .left-part p {
+            font-size: 15px;
+            opacity: 0.9;
+            line-height: 1.5;
+            color: green;
+            font-weight: bold;
+        }
+
+        /* RIGHT SIDE */
+        .right-part {
+            width: 60%;
+            padding: 40px 35px; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .right-part h2 {
+            font-size: 35px;
+            color: #0d47a1;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 20px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #0d47a1;
+        }
+
+        input::placeholder {
+            color: black;
+        }
+
+        .terms {
+            display: flex;
+            align-items: center;
+            margin: 10px 0 20px;
+        }
+
+        .terms input {
+            width: auto;
+            margin-right: 8px;
+            margin-bottom: 0;
+            accent-color: green;
+        }
+
+        .terms label {
+            font-size: 18px;
+            color: black;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: green;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        button:hover {
+            background: #0d47a1;
+        }
+
+        .login-link {
+            text-align: center;
+            font-size: 18px;
+            color: black;
+        }
+
+        .login-link a {
+            color: #0d47a1;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* RESPONSIVE DESIGN - PARA SA MOBILE */
+        @media (max-width: 768px) {
+            .signup-box {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .left-part {
+                width: 100%;
+                padding: 40px 30px;
+                text-align: center;
+            }
+
+            .logo-section {
+                margin-bottom: 40px;
+            }
+            .logo {
+            width: 30px;
+            height: 30px;
+            margin-bottom: 5px; 
+        }
+           .left-part h1 {
+            font-size: 35px;
+            margin-bottom: 15px;
+            line-height: 1.2;
+            color: #0d47a1;
+        }
+
+        .left-part p {
+            font-size: 15px;
+            opacity: 0.9;
+            line-height: 1.5;
+            color: green;
+            font-weight: bold;
+        }
+            .right-part {
+                width: 100%;
+                padding: 35px 30px;
+            }
+
+            .right-part h2 {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-box">
+        <div class="left-part">
+            <div class="logo-section">
+                <img src="logo.png" class="logo" alt="Kalinga Logo">
+                <h2 class="title">
+                    <span class="kalinga">Kalinga</span><br>
+                    <span class="senior">Senior</span> 
+                    <span class="portal">Portal</span>
+                </h2>
+            </div>
+            
+            <div class="tagline-section">
+                <h1>Your Document. Our Care. Always With You.</h1>
+                <p>Your trusted partner in organizing health records, legal papers, and personal memories—anytime, anywhere.</p>
+            </div>
+        </div>
+
+        <div class="right-part">
+            <h2>Sign Up</h2>
+            <form action="login.html">
+                <input type="text" placeholder="Full Name" required>
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Password" required>
+                <input type="password" placeholder="Confirm Password" required>
+
+                <div class="terms">
+                    <input type="checkbox" id="agree" required>
+                    <label for="agree">Agree to Terms and Conditions</label>
+                </div>
+
+                <button type="submit">Register</button>
+                <br><br>
+                <i><p class="login-link">Already a member? <a href="login.html"><u>Log in</u></a></p></i>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
