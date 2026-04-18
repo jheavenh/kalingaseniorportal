@@ -1,1 +1,481 @@
 
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalinga Senior Portal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: serif;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 80px;
+      padding: 0 30px;
+      background: rgba(248, 249, 250, 0.95);
+      backdrop-filter: blur(10px);
+      top: 0;
+      width: 100%;
+      z-index: 1001;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo {
+      width: 70px;
+      height: 70px;
+      margin-right:15px;
+    }
+
+    .title {
+      font-size: 30px;
+      font-weight: bold;
+      line-height: 1;
+    }
+
+    .kalinga, .senior { color: green; }
+    .portal { color: #0d47a1; }
+  
+  .header-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+  
+  .login {
+      color: #3C0061;
+      text-decoration: none;
+      padding: 12px 24px;
+      font-size: 18px;
+      font-weight: 500;
+      background: white;
+      border: 2px solid #3C0061;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+    }
+
+    .login:hover {
+      background: #3C0061;
+      color: white;
+    }
+
+    /* Menu Toggle */
+    .menu-toggle {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      width: 30px;
+      height: 25px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .menu-toggle span {
+      width: 100%;
+      height: 4px;
+      background: #0d47a1;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .menu-toggle.active span:nth-child(1) {
+      transform: rotate(45deg) translate(8px, 8px);
+    }
+    .menu-toggle.active span:nth-child(2) { opacity: 0; }
+    .menu-toggle.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(7px, -7px);
+    }
+
+    /* Mobile Menu */
+    .mobile-menu {
+      position: fixed;
+      top: 80px;
+      right: -100%;
+      width: 80%;
+      max-width: 350px;
+      height: calc(100vh - 80px);
+      background: linear-gradient(135deg, #0d47a1, #1e3a8a);
+      transition: right 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      padding: 30px 0;
+      z-index: 1000;
+      box-shadow: -5px 0 20px rgba(0,0,0,0.3);
+      overflow-y: auto;
+    }
+
+    .mobile-menu.active { right: 0; }
+
+    .menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .menu-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .mobile-menu a {
+      color: white;
+      text-decoration: none;
+      display: block;
+      padding: 20px 30px;
+      font-size: 20px;
+      font-weight: 500;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      transition: background 0.3s;
+    }
+
+    .mobile-menu a:hover,
+    .mobile-menu a:active {
+      background: rgba(255,255,255,0.2);
+    }
+
+    /* Mobile Styles */
+    @media (max-width: 768px) {
+      .header {
+        height: 70px;
+        padding: 0 20px;
+      }
+
+      .logo {
+        width: 50px;
+        height: 50px;margin-right:12px;
+      }
+
+      .title { font-size: 22px; }
+      
+      .login {
+        padding: 8px 16px;
+        font-size: 16px;
+      }
+
+      .menu-toggle {
+        width: 28px;
+        height: 22px;
+      }
+
+      .menu-toggle span { height: 3px; }
+
+      .mobile-menu {
+        top: 70px;
+        height: calc(100vh - 70px);
+        width: 85vw;
+        right: -85vw;
+      }
+
+      .menu-overlay {
+        top: 70px;
+        height: calc(100vh - 70px);
+      }
+    }
+
+    @media (max-width: 360px) {
+      .title { font-size: 20px; }
+    }
+  
+   
+  /* Main Content Area */
+.content-container {
+  margin-top: 100px;
+  padding: 20px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-title {
+  color: #0d47a1;
+  border-left: 5px solid green;
+  padding-left: 15px;
+  margin: 30px 0 20px;
+  font-size: 28px;
+}
+
+/* FAQ Accordion Style (CSS ONLY) */
+.faq-card {
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* Hide the actual checkbox */
+.faq-input {
+  display: none;
+}
+
+.faq-question {
+  width: 100%;
+  padding: 20px;
+  background: #f8f9fa;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.faq-answer {
+  padding: 0 20px;
+  max-height: 0; 
+  overflow: hidden;
+  transition: max-height 0.3s ease-out, padding 0.3s ease;
+  background: white;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* Logic: When checkbox is checked, expand the answer */
+.faq-input:checked ~ .faq-answer {
+  max-height: 200px; /* Adjust as needed for content size */
+  padding: 10px 20px 20px;
+}
+
+/* Rotation for the icon (optional) */
+.faq-input:checked ~ .faq-question i {
+  transform: rotate(180deg);
+  transition: transform 0.3s;
+}
+
+/* Guide Section (No changes needed as it was static) */
+.guide-step {
+  display: flex;
+  gap: 20px;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  align-items: flex-start;
+}
+
+.step-number {
+  background: green;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.step-text h4 {
+  color: #0d47a1;
+  margin-bottom: 5px;
+  font-size: 18px;
+}
+
+@media (max-width: 768px) {
+  .content-container { margin-top: 80px; }
+  .section-title { font-size: 24px; }
+}
+
+  </style>
+</head>
+<body>
+  <div class="menu-overlay" id="menuOverlay"></div>
+
+  <div class="header">
+    
+    <div class="logo-section">
+      <img src="logo.png" class="logo" alt="Kalinga Logo">
+      <h1 class="title">
+        <span class="kalinga">Kalinga</span><br>
+        <span class="senior">Senior</span> 
+        <span class="portal">Portal</span>
+      </h1>
+    </div>
+    
+    <div class="header-right">
+      <a href="login.html" class="login">Log In</a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div></div>
+
+  <nav class="mobile-menu" id="mobileMenu">
+    <a href="store.html"> <div class="nav-icon"><i class="fas fa-shield-alt"></i> Secure Storage</div></a>
+    <a href="apply.html"><div class="nav-icon"><i class="fas fa-file-contract"></i> Apply & Renew</div></a>
+    <a href="pay.html"><div class="nav-icon"><i class="fas fa-credit-card"></i> Pay Online</div></a>
+    <a href="dis.html"><div class="nav-icon"><i class="fas fa-gift"></i> Discounts & Benefits</div></a>
+    <a href="faq.html"><div class="nav-icon"><i class="fas fa-question-circle"></i> FAQ & Guides</div></a><hr>
+    <a href="index.html">Home</a>
+    <a href="acc.html">Account</a>
+    <a href="service.html">Services</a>
+    <a href="setting.html">Settings</a>
+    <a href="about.html">About Us</a>
+    <a href="contact.html">Contact Us</a>
+  </nav>
+  
+   <main class="content-container">
+
+  <section id="guide">
+    <h2 class="section-title">How to use the Portal</h2>
+
+    <div class="guide-step">
+      <div class="step-number">1</div>
+      <div class="step-text">
+        <h4>Login to your Account</h4>
+        <p>To access the system, go to the Login page and enter the email address you used to sign up. Carefully type your password into the password box. Once your details are entered, click the Login button to enter the system and view your documents.</p>
+      </div>
+    </div>
+
+    <div class="guide-step">
+      <div class="step-number">2</div>
+      <div class="step-text">
+        <h4>Sign up guide</h4>
+        <p>To create a new account, start by clicking the Sign Up button on the screen. First, type your full name into the name box. Next, enter your email address and create a password that you can easily remember. Type that same password again in the confirmation box to make sure it is correct. Finally, click the button at the bottom to finish creating your account.</p>
+      </div>
+    </div>
+    
+    
+    <div class="guide-step">
+      <div class="step-number">3</div>
+      <div class="step-text">
+        <h4>Explore Services</h4>
+        <p>Click on the 'Services' menu to find medical assistance, pension updates, and community events.</p>
+      </div>
+    </div>
+
+    <div class="guide-step">
+      <div class="step-number">4</div>
+      <div class="step-text">
+        <h4>Update Profile</h4>
+        <p>Keep your emergency contact information and medical records updated in 'Settings' for your safety.</p>
+      </div>
+    </div>
+
+    <div class="guide-step">
+      <div class="step-number">5</div>
+      <div class="step-text">
+        <h4>How to Search</h4>
+        <p>Go to Secure and Storage, scroll down, and you will find the Search Bar. Then, type the document name to find your documents.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <h2 class="section-title">Frequently Asked Questions</h2>
+
+    <div class="faq-card">
+      <input type="checkbox" id="faq1" class="faq-input">
+      <label class="faq-question" for="faq1">
+        What is Kalinga Senior Portal?
+        <i class="fas fa-chevron-down"></i>
+      </label>
+      <div class="faq-answer">
+        <p>The Kalinga Senior Portal is a dedicated digital space for senior citizens to access government services, community support, and health resources easily and securely.</p>
+      </div>
+    </div>
+
+    <div class="faq-card">
+      <input type="checkbox" id="faq2" class="faq-input">
+      <label class="faq-question" for="faq2">
+     Is my information safe?
+        <i class="fas fa-chevron-down"></i>
+      </label>
+      <div class="faq-answer">
+        <p>Yes. Our system is built to "Secure your documents and empower your life." We use encryption to keep your data private.</p>
+      </div>
+    </div>
+
+    <div class="faq-card">
+      <input type="checkbox" id="faq3" class="faq-input">
+      <label class="faq-question" for="faq3">
+        Is this service free?
+        <i class="fas fa-chevron-down"></i>
+      </label>
+      <div class="faq-answer">
+        <p>Yes, registration and use of the Kalinga Senior Portal are completely free for all registered senior citizens in the community.</p>
+      </div>
+    </div>
+
+    <div class="faq-card">
+      <input type="checkbox" id="faq4" class="faq-input">
+      <label class="faq-question" for="faq4">
+        Can I use this on my tablet or phone?
+        <i class="fas fa-chevron-down"></i>
+      </label>
+      <div class="faq-answer">
+        <p>Absolutely! The portal is designed to work on smartphones, tablets, and computers. The text size will automatically adjust to be readable on any screen.</p>
+      </div>
+    </div>
+
+    <div class="faq-card">
+      <input type="checkbox" id="faq5" class="faq-input">
+      <label class="faq-question" for="faq5">
+        Is there a limit to how many documents I can store?
+        <i class="fas fa-chevron-down"></i>
+      </label>
+      <div class="faq-answer">
+        <p>There is no limit for essential government IDs and medical records, so you can keep everything organized in one place forever</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const menuOverlay = document.getElementById('menuOverlay');
+
+    function toggleMenu() {
+      const isActive = mobileMenu.classList.contains('active');
+      mobileMenu.classList.toggle('active');
+      menuToggle.classList.toggle('active');
+      menuOverlay.classList.toggle('active');
+      document.body.style.overflow = isActive ? '' : 'hidden';
+    }
+
+    menuToggle.addEventListener('click', toggleMenu);
+    menuOverlay.addEventListener('click', toggleMenu);
+    
+    document.querySelectorAll('.mobile-menu a').forEach(link => {
+      link.addEventListener('click', toggleMenu);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+        toggleMenu();
+      }
+    });
+  </script>
+</body>
+  </html>
